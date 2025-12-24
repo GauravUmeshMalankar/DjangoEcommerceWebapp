@@ -31,7 +31,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', default='unsafe-dev-key')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'inefficacious-diamagnetically-agatha.ngrok-free.dev']
+ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://inefficacious-diamagnetically-agatha.ngrok-free.dev']
 
 
