@@ -19,7 +19,7 @@ A Django-based e-commerce application with Cashfree payment gateway integration.
 
 ### Home Page
 ![Home Page](media/uploads/demo_upload/01.png)
-media/uploads/demo_upload/01.png
+
 
 ### Product Page
 ![Product Page](media/uploads/demo_upload/02.png)
