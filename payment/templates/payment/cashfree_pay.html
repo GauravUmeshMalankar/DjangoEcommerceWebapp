@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://sdk.cashfree.com/js/ui/2.0.0/cashfree.sandbox.js"></script>
+</head>
+<body>
+
+<button id="payBtn">Pay Now</button>
+
+<script>
+const cashfree = new Cashfree("sandbox");
+
+document.getElementById("payBtn").onclick = function () {
+    cashfree.checkout({
+        paymentSessionId: "{{ payment_session_id }}",
+        redirectTarget: "_self"
+    });
+};
+</script>
+
+</body>
+</html>

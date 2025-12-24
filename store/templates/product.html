@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Main Container -->
+<div class="d-flex flex-column min-vh-100">
+
+  <!-- Top Spacer for Header -->
+  <div class="mt-5"></div>
+
+  <!-- Centered Product Card -->
+  <div class="container d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="card mb-5 shadow-lg" >
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-8">
+          <center>
+            <div class="card-body">
+          
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+
+              {% if product.is_sale %}
+              <!-- Sale Section -->
+              <div class="d-flex justify-content-center small text-warning mb-2">
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
+                &nbsp;<b>Sale</b>&nbsp;
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
+              </div>
+              <span class="text-muted text-decoration-line-through">₹{{ product.price }}</span>
+              <span class="fw-bold text-success"> ₹{{ product.sale_price }}</span>
+
+              {% else %}
+              <!-- Normal Price -->
+              <span class="fw-bold">₹{{ product.price }}</span>
+
+
+              
+
+              {% endif %}
+              <br>
+              <br>
+                  <!-- Buy Now Button -->
+              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center">
+              
+                       <!-- Quantity Section (Aligned Properly) -->
+                <div class="row justify-content-center align-items-center mb-5">
+                  <div class="col-md-5 text-end fw-bold">
+                    Quantity:
+                  </div>
+                  <div class="col-md-4">
+                    <select class="form-select" id="qty-cart">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                </div>
+
+                
+                  <a class="btn btn-outline-dark mt-auto" href="{% url 'home' %}">Home</a>
+                  <button type="button" name="product_id" value="{{ product.id }}" class ="btn btn-secondary" id="add-cart">Add to Cart</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+     
+    
+        </center>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('click', '#add-cart', function(e){
+
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'cart_add' %}" ,
+        data: {
+          product_id: $('#add-cart').val(),
+          product_qty: $('#qty-cart option:selected').text(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action:'post'
+        },
+        success: function(json){
+          document.getElementById("cart_quantity").
+            textContent = json.qty
+            location.reload();
+          //console.log(response);
+        },
+        error: function(xhr, status, error){
+          
+        }
+      });
+    });
+
+    setTimeout(function () {
+        let alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            let fade = new bootstrap.Alert(alert);
+            fade.close();
+        });
+    }, 5000); 
+  
+</script>
+
+
+{% endblock content %}

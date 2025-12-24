@@ -1,0 +1,78 @@
+ {% extends 'base.html' %}
+ 
+ {% block content %}
+ <div class="d-flex flex-column min-vh-100">
+ <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">UnShipped Order</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Orders Pending</p>
+                </div>
+            </div>
+        </header>
+
+
+    <!-- Table Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <!-- Card Wrapper -->
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4 fw-bold text-center">
+                            📦 Unshipped Orders List
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Amount Paid</th>
+                                        <th>Customer Email</th>
+                                        <th>Date Ordered</th>
+                                        <th>Shipping Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in orders %}
+                                    <tr>
+                                        <td class="fw-semibold"><a href="{% url 'orders' item.id %}">{{ item.id }}</a></td>
+                                        <td>₹ {{ item.amount_paid }}</td>
+                                        <td>{{ item.email }}</td>
+                                        <td>{{ item.date_ordered|date:"D, d M Y h:i A"  }}</td>
+                                        <td>
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="shipping_status" value="true">
+                                                <input type="hidden" name="num" value="{{ item.id }}">
+                                                <button type="Submit" class="btn btn-success">Mark Shipped</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-muted py-4">
+                                            No unshipped orders found
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+{% endblock content %}

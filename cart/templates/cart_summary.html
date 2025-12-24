@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+     <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Your shopping cart</p>
+                </div>
+            </div>
+        </header>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+       
+<div class="d-flex flex-column min-vh-100">
+
+        <div class ="container">
+           
+            {% if cart_products %}
+                {% for product in cart_products %}
+                
+                        <div class="card mb-5 shadow-lg" >
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+                                </div>
+                                <div class="col-md-8">
+                                <ce nter>
+                                <div class="card-body">
+                                
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.description }}</p>
+
+                                    {% if product.is_sale %}
+                                    <!-- Sale Section -->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    &nbsp;<b>Sale</b>&nbsp;
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    </div>
+                                    <span class="text-muted text-decoration-line-through">₹{{ product.price }}</span>
+                                    <span class="fw-bold text-success"> ₹{{ product.sale_price }}</span>
+
+                                    {% else %}
+                                    <!-- Normal Price -->
+                                    <span class="fw-bold">₹{{ product.price }}</span>
+
+
+                                    
+
+                                    {% endif %}
+                                    <br>
+                                    <br>
+                                        <!-- Buy Now Button -->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+
+                                            <!-- Quantity Section (Aligned Properly) -->
+                                            <div class="row justify-content-center align-items-center mb-5">
+                                            <div class="col-md-5 text-end fw-bold">
+                                                Quantity:
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="form-select" id="select{{product.id}}">
+
+                                                {% for key, value in quantities.items %}
+                                                    {% if key == product.id|slugify  %}
+                                                        <option selected>{{ value }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                </select>
+                                            </div>
+                                            </div>
+                                        <a class="btn btn-outline-dark mt-auto" href="{% url 'home' %}">Home</a>
+                                        <button type ="button" data-index="{{product.id}}" class="btn btn-secondary update-cart">Update</button>
+
+                                        <button type ="button" data-index="{{product.id}}" class="btn btn-danger delete-product">Delete</button>
+
+                                    
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                                </center>
+                            </div>
+                        </div>   
+                {% endfor %}
+                <div align="right">
+                <h3>Total: ₹ {{ totals }} </h3>
+                <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+                </div>
+                
+
+               <br><br><br><br><br> 
+            {% else %}
+                <h3>Your cart is empty.</h3>
+            {% endif %}
+        <br><br><br><br><br>
+       
+        </div>
+</div>  
+<script>
+  $(document).on('click', '.update-cart', function(e){
+
+      e.preventDefault();
+      var productid = $(this).data('index');
+      $.ajax({
+        type: "POST",
+        url: "{% url 'cart_update' %}" ,
+        data: {
+          product_id: $(this).data('index'),
+     
+          product_qty: $('#select'+productid+' option:selected').text(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action:'post'
+        },
+        success: function(json){
+      
+          location.reload();
+        },
+        error: function(xhr, status, error){
+          
+        }
+      });
+    });
+
+
+
+ $(document).on('click', '.delete-product', function(e){
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'cart_delete' %}" ,
+        data: {
+          product_id: $(this).data('index'),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action:'post'
+        },
+        success: function(json){
+            location.reload();
+        },
+        error: function(xhr, status, error){
+          
+        }
+      });
+    });
+
+
+    setTimeout(function () {
+        let alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            let fade = new bootstrap.Alert(alert);
+            fade.close();
+        });
+    }, 5000); 
+</script>
+
+
+
+{% endblock content %}
+
+        

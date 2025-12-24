@@ -1,0 +1,174 @@
+ {% extends 'base.html' %}
+ 
+ {% block content %}
+ <div class="d-flex flex-column min-vh-100">
+ <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Billing Info</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Make Payment</p>
+                </div>
+            </div>
+        </header>
+
+         <!-- Checkout Section -->
+        <div class="container my-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-header bg-light text-center fw-semibold fs-5">
+                        Order Summary
+                    </div>
+
+                    <div class="card-body">
+
+                        {% for product in cart_products %}
+                            <div class="d-flex justify-content-between align-items-start border-bottom py-3">
+
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">{{ product.name }}</h6>
+                                    <small class="text-muted">
+                                        Quantity:
+                                        {% for key, value in quantities.items %}
+                                            {% if key == product.id|slugify %}
+                                                {{ value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </small>
+                                </div>
+
+                                <div class="fw-semibold">
+                                    {% if product.is_sale %}
+                                        ₹{{ product.sale_price }}
+                                    {% else %}
+                                        ₹{{ product.price }}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                        <!-- Total -->
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <h6 class="fw-bold">Total Amount</h6>
+                            <h6 class="fw-bold">₹{{ totals }}</h6>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer bg-white text-center py-3">
+                        <a href="{% url 'cart_summary' %}" class="btn btn-outline-primary px-4">
+                            Update Cart
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Checkout Section -->
+        <div class="container my-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-header bg-light text-center fw-semibold fs-5">
+                        Shipping Info
+                    </div>
+
+                    <div class="card-body">
+                        Name: {{ shipping_info.shipping_full_name }}<br/>
+                        Email: {{ shipping_info.shipping_email }}<br/>
+                        Address1: {{ shipping_info.shipping_address1 }}<br/>
+                        Address2: {{ shipping_info.shipping_address2 }}<br/>
+                        City: {{ shipping_info.shipping_city }}<br/>
+                        State: {{ shipping_info.shipping_state }}<br/>
+                        Pincode: {{ shipping_info.shipping_pincode }}<br/>
+                        Country: {{ shipping_info.shipping_country }}<br/>
+                         <div class="card-footer bg-white text-center py-3">
+                        <a href="{% url 'checkout' %}" class="btn btn-outline-primary px-4">
+                            Update Info
+                        </a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    <!-- Cashfree Payment Section -->
+    <div class="container my-5 d-flex justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm rounded-4">
+                <div class="card-header bg-light text-center fw-semibold fs-5">
+                    Secure Payment via Cashfree
+                </div>
+                <div class="card-body text-center py-5">
+                    <h4>Amount to Pay: ₹{{ totals }}</h4>
+                    <button id="renderBtn" class="btn btn-success btn-lg px-5 mt-4">
+                        Pay Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cashfree SDK + Checkout Script -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script>
+        const cashfree = new Cashfree({
+            mode: "{{ cashfree_mode }}"  // "sandbox" for test, "production" for live
+        });
+
+        document.getElementById("renderBtn").addEventListener("click", () => {
+            let checkoutOptions = {
+                paymentSessionId: "{{ payment_session_id }}",
+          
+                returnUrl: "{{ request.scheme }}://{{ request.get_host }}{% url 'payment_success' %}?cf_order_id={{ cf_order_id }}"
+            };
+
+            cashfree.checkout(checkoutOptions).then((result) => {
+                if (result.error) {
+                    alert("Payment Error: " + result.error.message);
+                    console.error(result.error);
+                }
+                // Success or redirect will be handled by returnUrl
+            });
+        });
+    </script>
+
+
+        <br/>
+
+
+     
+
+        <!-- Billing Section 
+        <div class="container my-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-header bg-light text-center fw-semibold fs-5">
+                        Billing Info
+                    </div>
+                    <div class="card-body">
+                    <form method="POST" action="{%  url 'process_order' %}">
+                            {% csrf_token %}
+
+                            {{ billing_form.as_p }}
+                        <div class="card-footer bg-white text-center py-3">
+                            <button type="submit" class="btn btn-success px-4 ms-2">Bill Now</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+              
+            </div>
+        </div>  -->
+
+
+      
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <header class="bg-danger py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center">
+                <h1 class="display-4 fw-bolder">Payment Failed</h1>
+                <p class="lead fw-normal mb-0">Something went wrong with your payment 😔</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Failed Section -->
+    <div class="container my-5 flex-grow-1 d-flex justify-content-center align-items-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg rounded-4 border-0 text-center">
+                <div class="card-body py-5">
+                    <!-- Large Failed Icon -->
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle text-danger" style="font-size: 100px;"></i>
+                    </div>
+
+                    <h2 class="fw-bold text-danger mb-3">Payment Was Not Successful</h2>
+                    <p class="lead text-muted mb-4">
+                        Unfortunately, we couldn't process your payment at this time.<br>
+                        Please check your payment details and try again.
+                    </p>
+
+                  
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-3 d-md-flex justify-content-center mt-5">
+                        <a href="{% url 'checkout' %}" class="btn btn-outline-danger btn-lg px-5 py-3 me-md-3">
+                            <i class="fas fa-credit-card me-2"></i> Try Payment Again
+                        </a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-5 py-3">
+                            <i class="fas fa-home me-2"></i> Return to Home
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light text-muted small py-3">
+                    If the problem persists, please contact our support team or your payment provider.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+    .fa-times-circle {
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .card {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+</style>
+{% endblock content %}

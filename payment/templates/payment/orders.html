@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+<div class="d-flex flex-column min-vh-100">
+<!-- Header-->
+       <header class="bg-dark py-5">
+           <div class="container px-4 px-lg-5 my-5">
+               <div class="text-center text-white">
+                   <h1 class="display-4 fw-bolder">Order List</h1>
+                   <p class="lead fw-normal text-white-50 mb-0">Orders</p>
+               </div>
+           </div>
+       </header>
+ 
+      
+<body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card border-0 shadow rounded-3 my-5">
+            <div class="card-body p-4 p-sm-5">
+
+                <h5 class="text-center fw-semibold mb-4">Order Details</h5>
+              
+                <!-- Order Summary -->
+                <div class="mb-4">
+                  <p class="mb-1"><strong>Order ID:</strong> #{{ order.id}}</p>
+                  <p class="mb-1"><strong>Total Amount:</strong> ₹{{ order.amount_paid }}</p>
+                  <p class="mb-1"><strong>Email:</strong> {{ order.email}}</p>
+              
+                  {% if order.date_shipped %}
+                    <p class="mb-1 text-success">
+                      <strong>Date Shipped:</strong> {{ order.date_shipped|date:"d M Y, h:i A" }}
+                    </p>
+                  {% else %}
+                    <p class="mb-1 text-muted">
+                      <strong>Date Ordered:</strong> {{ order.date_ordered|date:"d M Y, h:i A" }}
+                    </p>
+                  {% endif %}
+                </div>
+              
+                <hr>
+              
+                <!-- Shipping Info -->
+                <div class="mb-4">
+                  <h6 class="fw-semibold mb-2">Shipping Information</h6>
+                  <p class="mb-1">{{ order.full_name }}</p>
+                  <p class="mb-0 text-muted">{{ order.shipping_address }}</p>
+                </div>
+              
+                <hr>
+              
+                <!-- Items Table -->
+                <div>
+                  <h6 class="fw-semibold mb-3">Ordered Items</h6>
+              
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Product</th>
+                          <th class="text-center">Qty</th>
+                          <th class="text-end">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in items %}
+                        <tr>
+                          <td>{{ item.product }}</td>
+                          <td class="text-center">{{ item.quantity }}</td>
+                          <td class="text-end">₹{{ item.price }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                {% if not order.shipped %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="shipping_status" value="true">
+                    <button type="Submit" class="btn btn-success">Marks as Shipped</button>
+                </form>
+                {% else %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="shipping_status" value="false">
+                    <button type="Submit" class="btn btn-danger">Marks as not Shipped</button>
+                </form>
+
+                {% endif %}
+              
+              </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+
+
+
+
+
+     
+</div>
+
+{% endblock content %}

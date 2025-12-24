@@ -1,0 +1,104 @@
+ {% extends 'base.html' %}
+ 
+ {% block content %}
+ <div class="d-flex flex-column min-vh-100">
+ <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Checkout</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Review your Order Summary</p>
+                </div>
+            </div>
+        </header>
+
+         <!-- Checkout Section -->
+        <div class="container my-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-header bg-light text-center fw-semibold fs-5">
+                        Order Summary
+                    </div>
+
+                    <div class="card-body">
+
+                        {% for product in cart_products %}
+                            <div class="d-flex justify-content-between align-items-start border-bottom py-3">
+
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">{{ product.name }}</h6>
+                                    <small class="text-muted">
+                                        Quantity:
+                                        {% for key, value in quantities.items %}
+                                            {% if key == product.id|slugify %}
+                                                {{ value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </small>
+                                </div>
+
+                                <div class="fw-semibold">
+                                    {% if product.is_sale %}
+                                        ₹{{ product.sale_price }}
+                                    {% else %}
+                                        ₹{{ product.price }}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                        <!-- Total -->
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <h6 class="fw-bold">Total Amount</h6>
+                            <h6 class="fw-bold">₹{{ totals }}</h6>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer bg-white text-center py-3">
+                        <a href="{% url 'cart_summary' %}" class="btn btn-outline-primary px-4">
+                            Update Cart
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Checkout Section -->
+        <div class="container my-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-header bg-light text-center fw-semibold fs-5">
+                        Shipping Info
+                    </div>
+
+                    <div class="card-body">
+                        <form method ="POST" action="{% url 'billing_info' %}">
+                            {% csrf_token %}
+
+                        
+                            {{ shipping_form.as_p }}
+                        <div class="card-footer bg-white text-center py-3">
+                    
+                        <button type="submit" class="btn btn-success px-4 ms-2">
+                            Bill Now
+                        </button>
+                        
+                        </form>
+                    </div>
+
+                  
+                </div>
+
+            </div>
+        </div>  
+
+      
+</div>
+
+{% endblock content %}
