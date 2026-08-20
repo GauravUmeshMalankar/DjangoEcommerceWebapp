@@ -48,7 +48,11 @@ INSTALLED_APPS = [
     'cart',
     'payment',
     'paypal.standard.ipn',
+    'cloudinary_storage',  
+    'cloudinary', 
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -147,6 +151,15 @@ CASHFREE_ENVIRONMENT = config('CASHFREE_ENVIRONMENT', default='TEST')
 CASHFREE_API_VERSION = config('CASHFREE_API_VERSION', default='2023-08-01')
 CASHFREE_WEBHOOK_SECRET = config('CASHFREE_WEBHOOK_SECRET', default='')
 
+
+# Cloudinary config for MEDIA files only (static stays on WhiteNoise)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME', default=''),
+    'API_KEY': config('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
