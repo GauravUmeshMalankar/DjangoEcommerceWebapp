@@ -15,6 +15,9 @@ A Django-based e-commerce application with Cashfree payment gateway integration.
 - Cashfree PG
 - HTML / CSS / Bootstrap
 
+## Demo
+Demo = https://djangoecommercewebapp.onrender.com/
+
 ## Screenshots
 
 ### Home Page
@@ -35,8 +38,6 @@ A Django-based e-commerce application with Cashfree payment gateway integration.
 ### Payment Page
 ![Payment Page](media/uploads/demo_upload/08.png)
 
-## Demo
-Demo = https://djangoecommercewebapp.onrender.com/
 
 ## Setup Instructions
 
