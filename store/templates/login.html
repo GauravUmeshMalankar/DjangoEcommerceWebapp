@@ -41,13 +41,14 @@
             <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
             <form method ="POST" action="{% url 'login' %}">
                 {% csrf_token %}
-                 <label>Username: AdminGaurav</label>
+
+                 <label>Username: "AdminGaurav"</label>
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" name = "username" placeholder="Enter your Username">
                 <label for="floatingInput">Email address</label>
                
               </div>
-                 <label>Password: Admin</label>
+                 <label>Password: "admin"</label>
               <div class="form-floating mb-3">
                 <input type="password" class="form-control"  name = "password" placeholder="Enter your Password">
                 <label for="floatingPassword">Password</label>
